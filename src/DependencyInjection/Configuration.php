@@ -24,7 +24,7 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sulu_sylius_producer_plugin');
+        $rootNode = $treeBuilder->root('sulu_sylius_producer');
 
         return $treeBuilder;
     }
