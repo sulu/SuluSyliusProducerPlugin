@@ -39,10 +39,7 @@ class ProductMessageProducer implements ProductMessageProducerInterface
 
     public function synchronize(ProductInterface $product): void
     {
-        $message = new SynchronizeProductMessage(
-            $product->getCode(),
-            ['product' => $this->productSerializer->serialize($product)]
-        );
+        $message = new SynchronizeProductMessage($product->getCode(), $this->productSerializer->serialize($product));
 
         $this->messageBus->dispatch($message);
     }
