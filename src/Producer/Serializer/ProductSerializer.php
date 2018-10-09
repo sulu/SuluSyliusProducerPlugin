@@ -38,7 +38,6 @@ class ProductSerializer implements ProductSerializerInterface
         }
 
         return [
-            'code' => $product->getCode(),
             'translations' => $translations,
             'variants' => $variants,
         ];

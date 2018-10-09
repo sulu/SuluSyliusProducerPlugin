@@ -48,7 +48,7 @@ class ProductMessageProducerSpec extends ObjectBehavior
             Argument::that(
                 function (SynchronizeProductMessage $message) {
                     return 'product-1' === $message->getCode()
-                        && ['product' => ['code' => 'product-1']] === $message->getPayload();
+                        && ['code' => 'product-1'] === $message->getPayload();
                 }
             )
         )->shouldBeCalled();
