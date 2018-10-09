@@ -1,0 +1,9 @@
+framework:
+    messenger:
+        transports:
+            sulu_sylius_transport: "enqueue://default"
+
+enqueue:
+    transport:
+        default: "amqp:"
+    client: ~

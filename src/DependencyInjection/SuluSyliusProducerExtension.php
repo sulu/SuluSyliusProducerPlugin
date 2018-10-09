@@ -18,7 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-final class SuluSyliusProducerPluginExtension extends Extension
+final class SuluSyliusProducerExtension extends Extension
 {
     public function load(array $config, ContainerBuilder $container): void
     {
