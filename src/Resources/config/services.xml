@@ -2,16 +2,27 @@
 
 <container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="Sulu\SyliusProducerPlugin\Producer\Serializer\ProductSerializer"/>
-
         <service id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"
                  class="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducer">
-            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\Serializer\ProductSerializer"/>
+            <argument type="service" id="jms_serializer"/>
+            <argument type="service" id="messenger.bus.default"/>
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface"/>
+        </service>
+
+        <service id="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface"
+                 class="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducer">
+            <argument type="service" id="jms_serializer"/>
             <argument type="service" id="messenger.bus.default"/>
         </service>
 
         <service id="Sulu\SyliusProducerPlugin\EventSubscriber\ProductEventSubscriber">
             <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Sulu\SyliusProducerPlugin\EventSubscriber\ProductVariantEventSubscriber">
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>

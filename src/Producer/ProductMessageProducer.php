@@ -13,41 +13,45 @@ declare(strict_types=1);
 
 namespace Sulu\SyliusProducerPlugin\Producer;
 
+use JMS\Serializer\SerializerInterface;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductMessage;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductMessage;
-use Sulu\SyliusProducerPlugin\Producer\Serializer\ProductSerializerInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class ProductMessageProducer implements ProductMessageProducerInterface
+class ProductMessageProducer extends BaseMessageProducer implements ProductMessageProducerInterface
 {
     /**
-     * @var ProductSerializerInterface
+     * @var ProductVariantMessageProducerInterface
      */
-    private $productSerializer;
+    private $productVariantMessageProducer;
 
-    /**
-     * @var MessageBusInterface
-     */
-    private $messageBus;
-
-    public function __construct(ProductSerializerInterface $productSerializer, MessageBusInterface $messageBus)
-    {
-        $this->productSerializer = $productSerializer;
-        $this->messageBus = $messageBus;
+    public function __construct(
+        SerializerInterface $serializer,
+        MessageBusInterface $messageBus,
+        ProductVariantMessageProducerInterface $productVariantMessageProducer
+    ) {
+        parent::__construct($serializer, $messageBus);
+        $this->productVariantMessageProducer = $productVariantMessageProducer;
     }
 
     public function synchronize(ProductInterface $product): void
     {
-        $message = new SynchronizeProductMessage($product->getCode(), $this->productSerializer->serialize($product));
+        $payload = $this->serialize($product);
+        $message = new SynchronizeProductMessage($product->getCode(), $payload);
+        $this->getMessageBus()->dispatch($message);
 
-        $this->messageBus->dispatch($message);
+        if ($product->isSimple()) {
+            foreach ($product->getVariants() as $variant) {
+                $this->productVariantMessageProducer->synchronize($variant);
+            }
+        }
     }
 
     public function remove(ProductInterface $product): void
     {
         $message = new RemoveProductMessage($product->getCode());
 
-        $this->messageBus->dispatch($message);
+        $this->getMessageBus()->dispatch($message);
     }
 }
