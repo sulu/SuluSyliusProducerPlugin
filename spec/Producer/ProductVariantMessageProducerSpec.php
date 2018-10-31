@@ -20,7 +20,6 @@ use Prophecy\Argument;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductVariantMessage;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductVariantMessage;
 use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducer;
-use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -29,10 +28,9 @@ class ProductVariantMessageProducerSpec extends ObjectBehavior
 {
     public function let(
         SerializerInterface $serializer,
-        MessageBusInterface $messageBus,
-        ProductVariantMessageProducerInterface $productVariantMessageProducer
+        MessageBusInterface $messageBus
     ): void {
-        $this->beConstructedWith($serializer, $messageBus, $productVariantMessageProducer);
+        $this->beConstructedWith($serializer, $messageBus);
     }
 
     public function it_is_initializable(): void

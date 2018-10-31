@@ -3,8 +3,10 @@ framework:
         routing:
             'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductMessage': sulu_sylius_transport
             'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductVariantMessage': sulu_sylius_transport
+            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeTaxonMessage': sulu_sylius_transport
             'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductMessage': sulu_sylius_transport
             'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductVariantMessage': sulu_sylius_transport
+            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveTaxonMessage': sulu_sylius_transport
         serializer:
             enabled: true
     serializer:

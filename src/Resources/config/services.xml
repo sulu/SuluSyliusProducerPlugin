@@ -15,6 +15,12 @@
             <argument type="service" id="messenger.bus.default"/>
         </service>
 
+        <service id="Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface"
+                 class="Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducer">
+            <argument type="service" id="jms_serializer"/>
+            <argument type="service" id="messenger.bus.default"/>
+        </service>
+
         <service id="Sulu\SyliusProducerPlugin\EventSubscriber\ProductEventSubscriber">
             <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"/>
 
@@ -23,6 +29,12 @@
 
         <service id="Sulu\SyliusProducerPlugin\EventSubscriber\ProductVariantEventSubscriber">
             <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="Sulu\SyliusProducerPlugin\EventSubscriber\TaxonEventSubscriber">
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>
