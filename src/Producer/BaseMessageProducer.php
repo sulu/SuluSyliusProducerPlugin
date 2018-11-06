@@ -38,7 +38,7 @@ abstract class BaseMessageProducer
     protected function serialize(Object $object): array
     {
         $serializationContext = new SerializationContext();
-        $serializationContext->setGroups(['Default', 'Detailed']);
+        $serializationContext->setGroups(['Default', 'Detailed', 'CustomData']);
 
         return json_decode(
             $this->serializer->serialize($object, 'json', $serializationContext),
