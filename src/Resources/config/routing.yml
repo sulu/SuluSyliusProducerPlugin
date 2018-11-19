@@ -1,0 +1,3 @@
+sylius_sulu_admin_api_authenticate:
+    controller: SuluSyliusProducerPlugin:Authentication:authenticate
+    path: v{version}/authenticate

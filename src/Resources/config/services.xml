@@ -42,5 +42,11 @@
         <service id="Sulu\SyliusProducerPlugin\EventSubscriber\CustomDataSerializeEventSubscriber">
             <tag name="jms_serializer.event_subscriber"/>
         </service>
+
+        <service id="Sulu\SyliusProducerPlugin\Controller\AuthenticationController">
+            <argument type="service" id="security.authentication.provider.dao.shop"/>
+
+            <tag name="controller.service_arguments" />
+        </service>
     </services>
 </container>
