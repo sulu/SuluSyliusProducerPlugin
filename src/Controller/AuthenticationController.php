@@ -19,6 +19,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 
 class AuthenticationController extends Controller
 {
@@ -38,14 +40,17 @@ class AuthenticationController extends Controller
         $email = $request->get('email');
         $plainPassword = $request->get('password');
 
-        $data = null;
+        $data = [
+            'user' => null,
+            'exception' => null,
+        ];
 
         $token = new UsernamePasswordToken($email, $plainPassword, 'shop');
-        $result = $this->authenticationProvider->authenticate($token);
+        try {
+            $token = $this->authenticationProvider->authenticate($token);
+            $user = $token->getUser();
 
-        if ($result) {
-            $user = $result->getUser();
-            $data = [
+            $data['user'] = [
                 'id' => $user->getId(),
                 'username' => $user->getUsername(),
                 'roles' => $user->getRoles(),
@@ -54,6 +59,8 @@ class AuthenticationController extends Controller
                 'lastName' => $user->getCustomer()->getLastName(),
                 'email' => $user->getCustomer()->getEmail(),
             ];
+        } catch (AuthenticationException $exception) {
+            $data['exception'] = get_class($exception);
         }
 
         return new JsonResponse($data);
