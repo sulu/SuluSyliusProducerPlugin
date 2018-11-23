@@ -1,3 +1,15 @@
+# TODO: We can remove this when issue is fixed:
+# https://github.com/Sylius/Sylius/issues/9938
+sylius_admin_api_order_index:
+    resource: |
+        alias: sylius.order
+        section: admin_api_order
+        only: [index]
+        grid: sylius_admin_order
+        serialization_version: $version
+    type: sylius.resource_api
+    prefix: /v{version}
+
 sylius_sulu_admin_api_authenticate:
     controller: SuluSyliusProducerPlugin:Authentication:authenticate
     path: v{version}/authenticate
