@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace spec\Sulu\SyliusProducerPlugin\Producer;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductMessage;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductMessage;
 use Sulu\SyliusProducerPlugin\Producer\ProductMessageProducer;
 use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface;
+use Sulu\SyliusProducerPlugin\Producer\Serializer\ProductSerializerInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -29,11 +28,11 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class ProductMessageProducerSpec extends ObjectBehavior
 {
     public function let(
-        SerializerInterface $serializer,
+        ProductSerializerInterface $productSerializer,
         MessageBusInterface $messageBus,
         ProductVariantMessageProducerInterface $productVariantMessageProducer
     ): void {
-        $this->beConstructedWith($serializer, $messageBus, $productVariantMessageProducer);
+        $this->beConstructedWith($productSerializer, $messageBus, $productVariantMessageProducer);
     }
 
     public function it_is_initializable(): void
@@ -42,13 +41,13 @@ class ProductMessageProducerSpec extends ObjectBehavior
     }
 
     public function it_should_dispatch_synchronize_message(
-        SerializerInterface $serializer,
+        ProductSerializerInterface $productSerializer,
         MessageBusInterface $messageBus,
         ProductInterface $product
     ): void {
         $product->getCode()->willReturn('product-1');
         $product->isSimple()->willReturn(false);
-        $serializer->serialize($product, 'json', Argument::type(SerializationContext::class))->shouldBeCalled()->willReturn('{"code": "product-1"}');
+        $productSerializer->serialize($product)->shouldBeCalled()->willReturn(['code' => 'product-1']);
 
         $this->synchronize($product);
 
@@ -63,7 +62,7 @@ class ProductMessageProducerSpec extends ObjectBehavior
     }
 
     public function it_should_dispatch_synchronize_message_with_simple_product(
-        SerializerInterface $serializer,
+        ProductSerializerInterface $productSerializer,
         ProductVariantMessageProducerInterface $productVariantMessageProducer,
         MessageBusInterface $messageBus,
         ProductInterface $product,
@@ -75,8 +74,8 @@ class ProductMessageProducerSpec extends ObjectBehavior
         $product->getVariants()->willReturn(new ArrayCollection(
             [$productVariant1->getWrappedObject(), $productVariant2->getWrappedObject()])
         );
-        $serializer->serialize($product, 'json', Argument::type(SerializationContext::class))
-            ->shouldBeCalled()->willReturn('{"code": "product-1"}');
+        $productSerializer->serialize($product)
+            ->shouldBeCalled()->willReturn(['code' => 'product-1']);
 
         $productVariantMessageProducer->synchronize($productVariant1)->shouldBeCalled();
         $productVariantMessageProducer->synchronize($productVariant2)->shouldBeCalled();
