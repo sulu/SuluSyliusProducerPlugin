@@ -79,7 +79,7 @@ class ProductSerializer implements ProductSerializerInterface
             'translations' => $translations,
             'attributes' => $attributes,
             'images' => $images,
-            'customData' => $this->getCustomData($translation),
+            'customData' => $this->getCustomData($product),
         ];
     }
 
