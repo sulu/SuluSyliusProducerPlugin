@@ -46,13 +46,12 @@ class ProductMessageProducer implements ProductMessageProducerInterface
         $this->productVariantMessageProducer = $productVariantMessageProducer;
     }
 
-    public function synchronize(ProductInterface $product): void
+    public function synchronize(ProductInterface $product, bool $syncVariant = true): void
     {
         $payload = $this->productSerializer->serialize($product);
-        $message = new SynchronizeProductMessage($product->getCode(), $payload);
-        $this->messageBus->dispatch($message);
+        $this->messageBus->dispatch(new SynchronizeProductMessage($product->getCode(), $payload));
 
-        if ($product->isSimple()) {
+        if ($syncVariant && $product->isSimple()) {
             foreach ($product->getVariants() as $variant) {
                 $this->productVariantMessageProducer->synchronize($variant);
             }

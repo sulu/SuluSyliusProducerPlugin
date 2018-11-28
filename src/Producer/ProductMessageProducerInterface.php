@@ -17,7 +17,7 @@ use Sylius\Component\Core\Model\ProductInterface;
 
 interface ProductMessageProducerInterface
 {
-    public function synchronize(ProductInterface $product): void;
+    public function synchronize(ProductInterface $product, bool $syncVariant = true): void;
 
     public function remove(ProductInterface $product): void;
 }
