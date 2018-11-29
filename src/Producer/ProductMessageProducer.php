@@ -31,31 +31,18 @@ class ProductMessageProducer implements ProductMessageProducerInterface
      */
     private $messageBus;
 
-    /**
-     * @var ProductVariantMessageProducerInterface
-     */
-    private $productVariantMessageProducer;
-
     public function __construct(
         ProductSerializerInterface $productSerializer,
-        MessageBusInterface $messageBus,
-        ProductVariantMessageProducerInterface $productVariantMessageProducer
+        MessageBusInterface $messageBus
     ) {
         $this->productSerializer = $productSerializer;
         $this->messageBus = $messageBus;
-        $this->productVariantMessageProducer = $productVariantMessageProducer;
     }
 
-    public function synchronize(ProductInterface $product, bool $syncVariant = true): void
+    public function synchronize(ProductInterface $product): void
     {
         $payload = $this->productSerializer->serialize($product);
         $this->messageBus->dispatch(new SynchronizeProductMessage($product->getCode(), $payload));
-
-        if ($syncVariant && $product->isSimple()) {
-            foreach ($product->getVariants() as $variant) {
-                $this->productVariantMessageProducer->synchronize($variant);
-            }
-        }
     }
 
     public function remove(ProductInterface $product): void
