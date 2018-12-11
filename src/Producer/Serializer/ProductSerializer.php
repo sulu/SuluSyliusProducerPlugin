@@ -54,6 +54,7 @@ class ProductSerializer implements ProductSerializerInterface
                 'id' => $image->getId(),
                 'type' => $image->getType(),
                 'path' => $image->getPath(),
+                'customData' => $this->getCustomData($image),
             ];
         }
 
@@ -68,6 +69,7 @@ class ProductSerializer implements ProductSerializerInterface
                 'id' => $productTaxon->getId(),
                 'taxonId' => $taxon->getId(),
                 'position' => $taxon->getPosition(),
+                'customData' => $this->getCustomData($productTaxon),
             ];
         }
 
@@ -79,6 +81,7 @@ class ProductSerializer implements ProductSerializerInterface
                 'type' => $attribute->getType(),
                 'localeCode' => $attribute->getLocaleCode(),
                 'value' => $attribute->getValue(),
+                'customData' => $this->getCustomData($attribute),
             ];
         }
 
@@ -111,10 +114,10 @@ class ProductSerializer implements ProductSerializerInterface
         );
     }
 
-    private function getCustomData($object): ?array
+    private function getCustomData($object): array
     {
         if (!$object instanceof CustomDataInterface) {
-            return null;
+            return [];
         }
 
         return $object->getCustomData();
