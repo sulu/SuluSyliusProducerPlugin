@@ -11,3 +11,17 @@ framework:
             enabled: true
     serializer:
         enabled: true
+
+# TODO: We can remove this wenn issue is fixed:
+# https://github.com/Sylius/Sylius/issues/10024
+sylius_grid:
+    grids:
+        sylius_admin_api_product_attribute:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: "%sylius.model.product_attribute.class%"
+            filters:
+                code:
+                    type: string
+                    label: sylius.ui.code
