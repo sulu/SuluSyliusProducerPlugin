@@ -18,6 +18,7 @@ use JMS\Serializer\SerializerInterface;
 use Sulu\SyliusProducerPlugin\Model\CustomDataInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductTranslationInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProductSerializer implements ProductSerializerInterface
 {
@@ -32,6 +33,59 @@ class ProductSerializer implements ProductSerializerInterface
     }
 
     public function serialize(ProductInterface $product): array
+    {
+        return [
+            'id' => $product->getId(),
+            'code' => $product->getCode(),
+            'enabled' => $product->isEnabled(),
+            'mainTaxonId' => $product->getMainTaxon() ? $product->getMainTaxon()->getId() : null,
+            'productTaxons' => $this->getProductTaxons($product),
+            'translations' => $this->getTranslations($product),
+            'attributes' => $this->getAttributes($product),
+            'images' => $this->getImages($product),
+            'customData' => $this->getCustomData($product),
+            'variants' => $this->getVariants($product)
+        ];
+    }
+
+    protected function getAttributes(ProductInterface $product): array
+    {
+        $attributes = [];
+        foreach ($product->getAttributes() as $attribute) {
+            $attributes[] = [
+                'id' => $attribute->getId(),
+                'code' => $attribute->getCode(),
+                'type' => $attribute->getType(),
+                'localeCode' => $attribute->getLocaleCode(),
+                'value' => $attribute->getValue(),
+                'customData' => $this->getCustomData($attribute),
+            ];
+        }
+
+        return $attributes;
+    }
+
+    protected function getProductTaxons(ProductInterface $product): array
+    {
+        $productTaxons = [];
+        foreach ($product->getProductTaxons() as $productTaxon) {
+            $taxon = $productTaxon->getTaxon();
+            if (!$taxon) {
+                continue;
+            }
+
+            $productTaxons[] = [
+                'id' => $productTaxon->getId(),
+                'taxonId' => $taxon->getId(),
+                'position' => $taxon->getPosition(),
+                'customData' => $this->getCustomData($productTaxon),
+            ];
+        }
+
+        return $productTaxons;
+    }
+
+    protected function getTranslations(ProductInterface $product): array
     {
         $translations = [];
         /** @var ProductTranslationInterface $translation */
@@ -48,58 +102,32 @@ class ProductSerializer implements ProductSerializerInterface
             ];
         }
 
+        return $translations;
+    }
+
+    protected function getImages(ProductInterface $product): array
+    {
         $images = [];
         foreach ($product->getImages() as $image) {
+            $filename = null;
+            $file = $image->getFile();
+            if ($file && $file instanceof UploadedFile) {
+                $filename = $file->getClientOriginalName();
+            }
+
             $images[] = [
                 'id' => $image->getId(),
                 'type' => $image->getType(),
                 'path' => $image->getPath(),
+                'filename' => $filename,
                 'customData' => $this->getCustomData($image),
             ];
         }
 
-        $productTaxons = [];
-        foreach ($product->getProductTaxons() as $productTaxon) {
-            $taxon = $productTaxon->getTaxon();
-            if (!$taxon) {
-                continue;
-            }
-
-            $productTaxons[] = [
-                'id' => $productTaxon->getId(),
-                'taxonId' => $taxon->getId(),
-                'position' => $taxon->getPosition(),
-                'customData' => $this->getCustomData($productTaxon),
-            ];
-        }
-
-        $attributes = [];
-        foreach ($product->getAttributes() as $attribute) {
-            $attributes[] = [
-                'id' => $attribute->getId(),
-                'code' => $attribute->getCode(),
-                'type' => $attribute->getType(),
-                'localeCode' => $attribute->getLocaleCode(),
-                'value' => $attribute->getValue(),
-                'customData' => $this->getCustomData($attribute),
-            ];
-        }
-
-        return [
-            'id' => $product->getId(),
-            'code' => $product->getCode(),
-            'enabled' => $product->isEnabled(),
-            'mainTaxonId' => $product->getMainTaxon() ? $product->getMainTaxon()->getId() : null,
-            'productTaxons' => $productTaxons,
-            'translations' => $translations,
-            'attributes' => $attributes,
-            'images' => $images,
-            'customData' => $this->getCustomData($product),
-            'variants' => $this->getVariants($product)
-        ];
+        return $images;
     }
 
-    private function getVariants(ProductInterface $product): array
+    protected function getVariants(ProductInterface $product): array
     {
         if (!$product->hasVariants()) {
             return [];
