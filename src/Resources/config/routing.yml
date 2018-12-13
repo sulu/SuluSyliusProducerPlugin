@@ -31,3 +31,9 @@ sylius_admin_api_product_attribute:
 sylius_sulu_admin_api_authenticate:
     controller: SuluSyliusProducerPlugin:Authentication:authenticate
     path: v{version}/authenticate
+    methods: [GET]
+
+sylius_sulu_admin_api_verify:
+    controller: SuluSyliusProducerPlugin:Verify:verify
+    path: v{version}/verify/{token}
+    methods: [PUT]

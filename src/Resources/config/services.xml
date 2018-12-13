@@ -43,12 +43,30 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="Sulu\SyliusProducerPlugin\EventSubscriber\CustomerEventSubscriber">
+            <argument type="service" id="sylius.shop_user.token_generator.email_verification" />
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <service id="Sulu\SyliusProducerPlugin\EventSubscriber\CustomDataSerializeEventSubscriber">
+            <tag name="jms_serializer.event_subscriber"/>
+        </service>
+
+        <service id="Sulu\SyliusProducerPlugin\EventSubscriber\UserSerializeEventSubscriber">
             <tag name="jms_serializer.event_subscriber"/>
         </service>
 
         <service id="Sulu\SyliusProducerPlugin\Controller\AuthenticationController">
             <argument type="service" id="security.authentication.provider.dao.shop"/>
+
+            <tag name="controller.service_arguments" />
+        </service>
+
+        <service id="Sulu\SyliusProducerPlugin\Controller\VerifyController">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="jms_serializer.serializer"/>
+            <argument type="service" id="sylius.repository.shop_user"/>
 
             <tag name="controller.service_arguments" />
         </service>
