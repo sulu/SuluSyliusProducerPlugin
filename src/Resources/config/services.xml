@@ -58,6 +58,7 @@
         </service>
 
         <service id="Sulu\SyliusProducerPlugin\Controller\AuthenticationController">
+            <argument type="service" id="jms_serializer"/>
             <argument type="service" id="security.authentication.provider.dao.shop"/>
 
             <tag name="controller.service_arguments" />

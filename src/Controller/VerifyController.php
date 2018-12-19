@@ -19,9 +19,7 @@ use Sylius\Component\Core\Model\ShopUserInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Webmozart\Assert\Assert;
 
 class VerifyController extends Controller
 {
@@ -49,20 +47,28 @@ class VerifyController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function verifyAction(Request $request, int $version, string $token): Response
+    public function verifyAction(int $version, string $token): Response
     {
         /** @var ShopUserInterface $user */
         $user = $this->userRepository->findOneBy(['emailVerificationToken' => $token]);
-        Assert::notNull($user, sprintf('User has not been found.'));
 
-        $user->setVerifiedAt(new \DateTime());
-        $user->setEmailVerificationToken(null);
-        $user->enable();
+        if (null === $user) {
+            return new JsonResponse(null, 404);
+        }
+
+        $this->verifyUser($user);
 
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize($user, 'json');
+        $data = $this->serializer->serialize($user->getCustomer(), 'json');
 
         return new JsonResponse($data, 200, [], true);
+    }
+
+    protected function verifyUser(ShopUserInterface $user): void
+    {
+        $user->setVerifiedAt(new \DateTime());
+        $user->setEmailVerificationToken(null);
+        $user->enable();
     }
 }
