@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sulu\SyliusProducerPlugin\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Sylius\Component\Core\Model\ShopUserInterface;
 use Sylius\Component\User\Repository\UserRepositoryInterface;
@@ -60,7 +61,9 @@ class VerifyController extends Controller
 
         $this->entityManager->flush();
 
-        $data = $this->serializer->serialize($user->getCustomer(), 'json');
+        $serializationContext = new SerializationContext();
+        $serializationContext->setGroups(['Default', 'Detailed']);
+        $data = $this->serializer->serialize($user->getCustomer(), 'json', $serializationContext);
 
         return new JsonResponse($data, 200, [], true);
     }

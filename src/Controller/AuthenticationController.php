@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sulu\SyliusProducerPlugin\Controller;
 
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use Sylius\Component\Core\Model\ShopUserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,7 +60,9 @@ class AuthenticationController extends Controller
                 throw new \RuntimeException('Invalid instance given');
             }
 
-            $data = $this->serializer->serialize($user->getCustomer(), 'json');
+            $serializationContext = new SerializationContext();
+            $serializationContext->setGroups(['Default', 'Detailed']);
+            $data = $this->serializer->serialize($user->getCustomer(), 'json', $serializationContext);
 
             return new JsonResponse($data, 200, [], true);
         } catch (AuthenticationException $exception) {

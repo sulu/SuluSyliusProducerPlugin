@@ -44,5 +44,11 @@ class UserSerializeEventSubscriber implements EventSubscriberInterface
         }
 
         $event->getVisitor()->setData('token', $object->getEmailVerificationToken());
+        $event->getVisitor()->setData('hash', $this->generateHash($object));
+    }
+
+    private function generateHash(UserInterface $user): string
+    {
+        return sha1($user->getPassword() . $user->isAccountNonLocked() . $user->isEnabled() . $user->isAccountNonExpired() . $user->isCredentialsNonExpired() . $user->isVerified());
     }
 }
