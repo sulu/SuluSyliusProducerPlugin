@@ -7,10 +7,6 @@ framework:
             'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductMessage': sulu_sylius_transport
             'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductVariantMessage': sulu_sylius_transport
             'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveTaxonMessage': sulu_sylius_transport
-        serializer:
-            enabled: true
-    serializer:
-        enabled: true
 
 # TODO: We can remove this wenn issue is fixed:
 # https://github.com/Sylius/Sylius/issues/10024
