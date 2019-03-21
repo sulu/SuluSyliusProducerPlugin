@@ -95,5 +95,9 @@
 
             <tag name="console.command" />
         </service>
+
+        <service id="Sulu\SyliusProducerPlugin\Form\Extension\AddressTypeExtension">
+            <tag name="form.type_extension" />
+        </service>
     </services>
 </container>

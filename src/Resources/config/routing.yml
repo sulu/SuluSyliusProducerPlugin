@@ -1,3 +1,16 @@
+# Address
+sylius_admin_api_address:
+    resource: |
+        alias: sylius.address
+        section: admin_api
+        serialization_version: $version
+        grid: sylius_admin_api_address
+        form:
+            options:
+                customerField: true
+    type: sylius.resource_api
+    prefix: /v{version}
+
 # TODO: We can remove this when issue is fixed:
 # https://github.com/Sylius/Sylius/issues/9938
 sylius_admin_api_order_index:
@@ -5,7 +18,7 @@ sylius_admin_api_order_index:
         alias: sylius.order
         section: admin_api_order
         only: [index]
-        grid: sylius_admin_order
+        grid: sylius_admin_api_order
         serialization_version: $version
     type: sylius.resource_api
     prefix: /v{version}
