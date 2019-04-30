@@ -62,7 +62,7 @@ class VerifyController extends Controller
         $this->entityManager->flush();
 
         $serializationContext = new SerializationContext();
-        $serializationContext->setGroups(['Default', 'Detailed']);
+        $serializationContext->setGroups(['Default', 'Detailed', 'CustomData']);
         $data = $this->serializer->serialize($user->getCustomer(), 'json', $serializationContext);
 
         return new JsonResponse($data, 200, [], true);
