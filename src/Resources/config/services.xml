@@ -43,6 +43,14 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="Sulu\SyliusProducerPlugin\EventSubscriber\AddressSerializeEventSubscriber">
+            <tag name="jms_serializer.event_subscriber"/>
+        </service>
+
+        <service id="Sulu\SyliusProducerPlugin\EventSubscriber\OrderSerializeEventSubscriber">
+            <tag name="jms_serializer.event_subscriber"/>
+        </service>
+
         <service id="Sulu\SyliusProducerPlugin\EventSubscriber\CustomerEventSubscriber">
             <argument type="service" id="sylius.shop_user.token_generator.email_verification" />
 

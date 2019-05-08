@@ -10,6 +10,9 @@ sylius_admin_api_address:
                 customerField: true
     type: sylius.resource_api
     prefix: /v{version}
+    defaults:
+        _sylius:
+            serialization_groups: [Default, Detailed]
 
 # TODO: We can remove this when issue is fixed:
 # https://github.com/Sylius/Sylius/issues/9938
