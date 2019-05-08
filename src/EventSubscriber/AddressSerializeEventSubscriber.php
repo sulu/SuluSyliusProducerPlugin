@@ -40,7 +40,7 @@ class AddressSerializeEventSubscriber implements EventSubscriberInterface
         }
 
         $groups = $event->getContext()->getAttribute('groups');
-        if (!in_array('Detailed', $groups)) {
+        if (!in_array('Default', $groups) && !in_array('Detailed', $groups)) {
             return;
         }
 
