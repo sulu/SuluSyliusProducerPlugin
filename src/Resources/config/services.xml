@@ -7,8 +7,6 @@
             <argument type="service" id="jms_serializer"/>
         </service>
 
-        <service id="sulu_sylius_producer.messenger_bus" alias="messenger.default_bus"/>
-
         <service id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"
                  class="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducer">
             <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\Serializer\ProductSerializerInterface"/>
