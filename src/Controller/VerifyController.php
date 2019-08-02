@@ -50,9 +50,8 @@ class VerifyController extends Controller
 
     public function verifyAction(int $version, string $token): Response
     {
-        /** @var ShopUserInterface $user */
+        /** @var ShopUserInterface|null $user */
         $user = $this->userRepository->findOneBy(['emailVerificationToken' => $token]);
-
         if (null === $user) {
             return new JsonResponse(null, 404);
         }

@@ -23,8 +23,13 @@ class ProductVariantMessageProducer extends BaseMessageProducer implements Produ
     {
         $payload = $this->serialize($productVariant);
 
+        $product = $productVariant->getProduct();
+        if (!$product) {
+            return;
+        }
+
         $message = new SynchronizeProductVariantMessage(
-            $productVariant->getProduct()->getCode(),
+            $product->getCode(),
             $productVariant->getCode(),
             $payload
         );

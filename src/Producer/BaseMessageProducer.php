@@ -35,7 +35,7 @@ abstract class BaseMessageProducer
         $this->messageBus = $messageBus;
     }
 
-    protected function serialize(Object $object): array
+    protected function serialize(object $object): array
     {
         $serializationContext = new SerializationContext();
         $serializationContext->setGroups(['Default', 'Detailed', 'CustomData']);

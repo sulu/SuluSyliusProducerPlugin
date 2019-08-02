@@ -16,9 +16,7 @@ namespace Sulu\SyliusProducerPlugin\EventSubscriber;
 use JMS\Serializer\EventDispatcher\Events;
 use JMS\Serializer\EventDispatcher\EventSubscriberInterface;
 use JMS\Serializer\EventDispatcher\ObjectEvent;
-use Sylius\Component\Addressing\Model\AddressInterface;
 use Sylius\Component\Order\Model\OrderInterface;
-use Sylius\Component\User\Model\UserInterface;
 
 class OrderSerializeEventSubscriber implements EventSubscriberInterface
 {

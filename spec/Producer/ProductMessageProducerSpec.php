@@ -23,6 +23,7 @@ use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface;
 use Sulu\SyliusProducerPlugin\Producer\Serializer\ProductSerializerInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class ProductMessageProducerSpec extends ObjectBehavior
@@ -49,8 +50,6 @@ class ProductMessageProducerSpec extends ObjectBehavior
         $product->isSimple()->willReturn(false);
         $productSerializer->serialize($product)->shouldBeCalled()->willReturn(['code' => 'product-1']);
 
-        $this->synchronize($product);
-
         $messageBus->dispatch(
             Argument::that(
                 function (SynchronizeProductMessage $message) {
@@ -58,12 +57,17 @@ class ProductMessageProducerSpec extends ObjectBehavior
                         && ['code' => 'product-1'] === $message->getPayload();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->synchronize($product);
     }
 
     public function it_should_dispatch_synchronize_message_with_simple_product(
         ProductSerializerInterface $productSerializer,
-        ProductVariantMessageProducerInterface $productVariantMessageProducer,
         MessageBusInterface $messageBus,
         ProductInterface $product,
         ProductVariantInterface $productVariant1,
@@ -77,11 +81,6 @@ class ProductMessageProducerSpec extends ObjectBehavior
         $productSerializer->serialize($product)
             ->shouldBeCalled()->willReturn(['code' => 'product-1']);
 
-        $productVariantMessageProducer->synchronize($productVariant1)->shouldBeCalled();
-        $productVariantMessageProducer->synchronize($productVariant2)->shouldBeCalled();
-
-        $this->synchronize($product);
-
         $messageBus->dispatch(
             Argument::that(
                 function (SynchronizeProductMessage $message) {
@@ -89,7 +88,13 @@ class ProductMessageProducerSpec extends ObjectBehavior
                         && ['code' => 'product-1'] === $message->getPayload();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->synchronize($product);
     }
 
     public function it_should_dispatch_remove_message(
@@ -98,14 +103,18 @@ class ProductMessageProducerSpec extends ObjectBehavior
     ): void {
         $product->getCode()->willReturn('product-1');
 
-        $this->remove($product);
-
         $messageBus->dispatch(
             Argument::that(
                 function (RemoveProductMessage $message) {
                     return 'product-1' === $message->getCode();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->remove($product);
     }
 }

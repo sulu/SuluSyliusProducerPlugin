@@ -83,17 +83,17 @@ class SynchronizeProductsCommand extends BaseSynchronizeCommand
         $progressBar->start();
 
         $processedItems = 0;
-        while (($row = $iterableResult->next()) !== false) {
+        while (false !== ($row = $iterableResult->next())) {
             $product = $row[0];
             if (!$product instanceof ProductInterface) {
                 continue;
             }
 
-            $this->productMessageProducer->synchronize($product, false);
+            $this->productMessageProducer->synchronize($product);
 
             $this->entityManager->detach($product);
-            $processedItems++;
-            if ($processedItems % self::BULK_SIZE === 0) {
+            ++$processedItems;
+            if (0 === $processedItems % self::BULK_SIZE) {
                 $this->entityManager->clear();
                 gc_collect_cycles();
             }
