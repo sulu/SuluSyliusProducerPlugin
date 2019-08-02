@@ -34,17 +34,19 @@ class ProductSerializer implements ProductSerializerInterface
 
     public function serialize(ProductInterface $product): array
     {
+        $mainTaxon = $product->getMainTaxon();
+
         return [
             'id' => $product->getId(),
             'code' => $product->getCode(),
             'enabled' => $product->isEnabled(),
-            'mainTaxonId' => $product->getMainTaxon() ? $product->getMainTaxon()->getId() : null,
+            'mainTaxonId' => $mainTaxon ? $mainTaxon->getId() : null,
             'productTaxons' => $this->getProductTaxons($product),
             'translations' => $this->getTranslations($product),
             'attributes' => $this->getAttributes($product),
             'images' => $this->getImages($product),
             'customData' => $this->getCustomData($product),
-            'variants' => $this->getVariants($product)
+            'variants' => $this->getVariants($product),
         ];
     }
 

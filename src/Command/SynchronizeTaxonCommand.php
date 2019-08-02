@@ -14,17 +14,9 @@ declare(strict_types=1);
 namespace Sulu\SyliusProducerPlugin\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface;
-use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface;
 use Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface;
-use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Model\TaxonInterface;
-use Sylius\Component\Core\Repository\ProductRepositoryInterface;
-use Sylius\Component\Core\Repository\ProductVariantRepositoryInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

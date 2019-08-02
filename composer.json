@@ -31,7 +31,11 @@
         "phpstan/phpstan-symfony": "^0.10",
         "phpstan/phpstan-webmozart-assert": "^0.10",
         "phpunit/phpunit": "^6.5",
-        "sylius-labs/coding-standard": "^2.0"
+        "sroze/messenger-enqueue-transport": "^0.3.1",
+        "sylius-labs/coding-standard": "^2.0",
+        "symfony/debug-bundle": "^4.1",
+        "symfony/web-profiler-bundle": "^4.1",
+        "symfony/web-server-bundle": "^4.1"
     },
     "prefer-stable": true,
     "autoload": {
@@ -54,7 +58,7 @@
         "initialize-dev": [
             "(cd tests/Application && bin/console doctrine:database:create --env=dev)",
             "(cd tests/Application && bin/console doctrine:schema:update --force --env=dev)",
-            "(cd tests/Application && bin/console assets:install web --env=dev)",
+            "(cd tests/Application && bin/console assets:install public --env=dev)",
             "(cd tests/Application && bin/console cache:warmup --env=dev)",
             "(cd tests/Application && bin/console sylius:fixtures:load --env=dev)",
             "@build-js"
@@ -62,11 +66,11 @@
         "initialize-test": [
             "(cd tests/Application && bin/console doctrine:database:create --env=test -vvv)",
             "(cd tests/Application && bin/console doctrine:schema:update --force --env=test -vvv)",
-            "(cd tests/Application && bin/console assets:install web --env=test -vvv)",
+            "(cd tests/Application && bin/console assets:install public --env=test -vvv)",
             "(cd tests/Application && bin/console cache:warmup --env=test -vvv)",
             "@build-js"
         ],
-        "serve": "(cd tests/Application && bin/console server:run 127.0.0.1:8080 -d web --env=test --quiet > /dev/null 2>&1 &)",
+        "serve": "(cd tests/Application && bin/console server:run 127.0.0.1:8080 -d public --env=test --quiet > /dev/null 2>&1 &)",
         "phpunit": "bin/phpunit",
         "phpspec": "bin/phpspec run",
         "behat": "bin/behat --strict -vvv --no-interaction || bin/behat --strict -vvv --no-interaction --rerun",
@@ -82,15 +86,5 @@
     "config": {
         "bin-dir": "bin",
         "sort-packages": true
-    },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/wachterjohannes/SuluSyliusConsumerBundle.git"
-        },
-        {
-            "type": "git",
-            "url": "https://github.com/wachterjohannes/sulu.git"
-        }
-    ]
+    }
 }

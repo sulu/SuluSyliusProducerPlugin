@@ -29,9 +29,9 @@ final class SuluSyliusProducerExtension extends Extension implements PrependExte
                     'buses' => [
                         'sulu_sylius_producer.messenger_bus' => [
                             'default_middleware' => 'allow_no_handlers',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ]);
         }
     }

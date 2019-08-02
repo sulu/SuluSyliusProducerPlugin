@@ -13,18 +13,15 @@ declare(strict_types=1);
 
 namespace spec\Sulu\SyliusProducerPlugin\Producer;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveTaxonMessage;
 use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeTaxonMessage;
-use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface;
 use Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducer;
-use Sylius\Component\Core\Model\ProductInterface;
-use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Model\TaxonInterface;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class TaxonMessageProducerSpec extends ObjectBehavior
@@ -50,8 +47,6 @@ class TaxonMessageProducerSpec extends ObjectBehavior
         $taxon->getParent()->willReturn(null);
         $serializer->serialize($taxon, 'json', Argument::type(SerializationContext::class))->shouldBeCalled()->willReturn('{"id": 1}');
 
-        $this->synchronize($taxon);
-
         $messageBus->dispatch(
             Argument::that(
                 function (SynchronizeTaxonMessage $message) {
@@ -59,7 +54,13 @@ class TaxonMessageProducerSpec extends ObjectBehavior
                         && ['id' => 1] === $message->getPayload();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->synchronize($taxon);
     }
 
     public function it_should_dispatch_synchronize_message_with_root(
@@ -76,8 +77,6 @@ class TaxonMessageProducerSpec extends ObjectBehavior
 
         $serializer->serialize($parent, 'json', Argument::type(SerializationContext::class))->shouldBeCalled()->willReturn('{"id": 9}');
 
-        $this->synchronize($taxon);
-
         $messageBus->dispatch(
             Argument::that(
                 function (SynchronizeTaxonMessage $message) {
@@ -85,23 +84,30 @@ class TaxonMessageProducerSpec extends ObjectBehavior
                         && ['id' => 9] === $message->getPayload();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->synchronize($taxon);
     }
 
     public function it_should_dispatch_remove_message(
-        MessageBusInterface $messageBus,
-        TaxonInterface $taxon
+        MessageBusInterface $messageBus
     ): void {
-        $taxon->getId()->willReturn(79);
-
-        $this->remove($taxon);
-
         $messageBus->dispatch(
             Argument::that(
                 function (RemoveTaxonMessage $message) {
                     return 79 === $message->getId();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->remove(79);
     }
 }

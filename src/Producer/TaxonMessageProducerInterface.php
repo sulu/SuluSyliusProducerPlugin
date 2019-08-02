@@ -19,5 +19,5 @@ interface TaxonMessageProducerInterface
 {
     public function synchronize(TaxonInterface $taxon): void;
 
-    public function remove(TaxonInterface $taxon): void;
+    public function remove(int $id): void;
 }

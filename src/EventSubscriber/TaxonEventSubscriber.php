@@ -25,9 +25,15 @@ class TaxonEventSubscriber implements EventSubscriberInterface
         return [
             'sylius.taxon.post_create' => 'synchronize',
             'sylius.taxon.post_update' => 'synchronize',
-            'sylius.taxon.post_delete' => 'remove',
+            'sylius.taxon.pre_delete' => 'preRemove',
+            'sylius.taxon.post_delete' => 'postRemove',
         ];
     }
+
+    /**
+     * @var array
+     */
+    private $idsCache = [];
 
     /**
      * @var TaxonMessageProducerInterface
@@ -49,13 +55,24 @@ class TaxonEventSubscriber implements EventSubscriberInterface
         $this->messageProducer->synchronize($taxon);
     }
 
-    public function remove(GenericEvent $event)
+    public function preRemove(GenericEvent $event)
     {
         $taxon = $event->getSubject();
         if (!$taxon instanceof TaxonInterface) {
             return;
         }
 
-        $this->messageProducer->remove($taxon);
+        $this->idsCache[spl_object_hash($taxon)] = $taxon->getId();
+    }
+
+    public function postRemove(GenericEvent $event)
+    {
+        $taxon = $event->getSubject();
+        $hash = spl_object_hash($taxon);
+        if (!$taxon instanceof TaxonInterface || !array_key_exists($hash, $this->idsCache)) {
+            return;
+        }
+
+        $this->messageProducer->remove($this->idsCache[$hash]);
     }
 }

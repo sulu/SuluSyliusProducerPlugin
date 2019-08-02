@@ -22,6 +22,7 @@ use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductVar
 use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducer;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
+use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class ProductVariantMessageProducerSpec extends ObjectBehavior
@@ -50,8 +51,6 @@ class ProductVariantMessageProducerSpec extends ObjectBehavior
         $serializer->serialize($productVariant, 'json', Argument::type(SerializationContext::class))
             ->shouldBeCalled()->willReturn('{"code": "product-1"}');
 
-        $this->synchronize($productVariant);
-
         $messageBus->dispatch(
             Argument::that(
                 function (SynchronizeProductVariantMessage $message) {
@@ -60,7 +59,13 @@ class ProductVariantMessageProducerSpec extends ObjectBehavior
                         && ['code' => 'product-1'] === $message->getPayload();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->synchronize($productVariant);
     }
 
     public function it_should_dispatch_remove_message(
@@ -69,14 +74,18 @@ class ProductVariantMessageProducerSpec extends ObjectBehavior
     ): void {
         $productVariant->getCode()->willReturn('product-1-variant-0');
 
-        $this->remove($productVariant);
-
         $messageBus->dispatch(
             Argument::that(
                 function (RemoveProductVariantMessage $message) {
                     return 'product-1-variant-0' === $message->getCode();
                 }
             )
-        )->shouldBeCalled();
+        )->shouldBeCalled()->will(
+            function ($arguments) {
+                return new Envelope($arguments[0]);
+            }
+        );
+
+        $this->remove($productVariant);
     }
 }

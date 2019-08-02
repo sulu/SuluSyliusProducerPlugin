@@ -4,6 +4,6 @@ framework:
             sulu_sylius_transport: "enqueue://default"
 
 enqueue:
-    transport:
-        default: "amqp:"
-    client: ~
+    default:
+        transport: "amqp:"
+        client: ~

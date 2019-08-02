@@ -23,22 +23,28 @@ class TaxonMessageProducer extends BaseMessageProducer implements TaxonMessagePr
     {
         $root = null;
         while (!$root) {
-            if ($taxon->getParent()) {
-                $taxon = $taxon->getParent();
+            $parent = $taxon->getParent();
+            if ($parent) {
+                $taxon = $parent;
 
                 continue;
             }
 
             $root = $taxon;
         }
+
+        if (!$root) {
+            return;
+        }
+
         $payload = $this->serialize($root);
         $message = new SynchronizeTaxonMessage($root->getId(), $payload);
         $this->getMessageBus()->dispatch($message);
     }
 
-    public function remove(TaxonInterface $taxon): void
+    public function remove(int $id): void
     {
-        $message = new RemoveTaxonMessage($taxon->getId());
+        $message = new RemoveTaxonMessage($id);
 
         $this->getMessageBus()->dispatch($message);
     }

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace spec\Sulu\SyliusProducerPlugin\EventSubscriber;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 use Sulu\SyliusProducerPlugin\EventSubscriber\TaxonEventSubscriber;
 use Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface;
 use Sylius\Component\Core\Model\TaxonInterface;
@@ -61,10 +62,12 @@ class TaxonEventSubscriberSpec extends ObjectBehavior
         TaxonInterface $taxon
     ): void {
         $event->getSubject()->willReturn($taxon);
+        $taxon->getId()->willReturn(42);
 
-        $this->remove($event);
+        $this->preRemove($event);
+        $this->postRemove($event);
 
-        $messageProducer->remove($taxon)->shouldBeCalled();
+        $messageProducer->remove(42)->shouldBeCalled();
     }
 
     public function it_should_not_call_remove_on_other_subject(
@@ -74,8 +77,9 @@ class TaxonEventSubscriberSpec extends ObjectBehavior
     ): void {
         $event->getSubject()->willReturn($taxon);
 
-        $this->remove($event);
+        $this->preRemove($event);
+        $this->postRemove($event);
 
-        $messageProducer->remove($taxon)->shouldNotBeCalled();
+        $messageProducer->remove(Argument::any())->shouldNotBeCalled();
     }
 }
