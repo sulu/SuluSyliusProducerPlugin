@@ -16,7 +16,7 @@ namespace Sulu\SyliusProducerPlugin\Command;
 use Doctrine\ORM\EntityManagerInterface;
 use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
-use Sylius\Component\Core\Repository\ProductVariantRepositoryInterface;
+use Sylius\Component\Product\Repository\ProductVariantRepositoryInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
