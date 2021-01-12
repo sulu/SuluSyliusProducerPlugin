@@ -78,11 +78,6 @@
         "php-cs": "bin/php-cs-fixer fix --verbose --diff --dry-run",
         "php-cs-fix": "bin/php-cs-fixer fix"
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
-    },
     "config": {
         "bin-dir": "bin",
         "sort-packages": true
