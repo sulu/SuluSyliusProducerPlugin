@@ -7,32 +7,55 @@ on:
             - '[0-9]+.x'
             - '[0-9]+.[0-9]+'
 
+env:
+    SYLIUS_CACHE_DIR: /tmp/.sylius-cache
+
 jobs:
     build:
 
         runs-on: ubuntu-latest
 
         steps:
-            - uses: actions/checkout@v2
+            - name: Checkout project
+              uses: actions/checkout@v2
 
-            - name: Validate composer.json and composer.lock
-              run: composer validate
-
-            - name: Cache Composer packages
-              id: composer-cache
-              uses: actions/cache@v2
+            - name: Install and configure PHP
+              uses: shivammathur/setup-php@v2
               with:
-                  path: vendor
-                  key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-php-
+                  php-version: '7.2'
 
-            - name: Install dependencies
-              if: steps.composer-cache.outputs.cache-hit != 'true'
-              run: composer install --prefer-dist --no-progress --no-suggest
+            - run: mkdir -p "${SYLIUS_CACHE_DIR}"
+            - run: composer install --no-interaction --prefer-dist
+            - run: composer initialize-test
 
-        # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-        # Docs: https://getcomposer.org/doc/articles/scripts.md
+            - name: Configure display
+              run: |
+                  /sbin/start-stop-daemon --start --quiet --pidfile /tmp/xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1680x1050x16
+                  export DISPLAY=:99
 
-        # - name: Run test suite
-        #   run: composer run-script test
+            - name: Download and configure ChromeDriver
+              run: |
+                  curl http://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip > chromedriver.zip
+                  unzip chromedriver.zip
+                  chmod +x chromedriver
+                  mv chromedriver $SYLIUS_CACHE_DIR
+
+            - name: Run ChromeDriver
+              run: $SYLIUS_CACHE_DIR/chromedriver > /dev/null 2>&1 &
+
+            - name: Download and configure Selenium
+              run: |
+                  curl http://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar > selenium.jar
+                  mv selenium.jar $SYLIUS_CACHE_DIR
+
+            - name: Run ChromeDriver
+              run: java -Dwebdriver.chrome.driver=$SYLIUS_CACHE_DIR/chromedriver -jar $SYLIUS_CACHE_DIR/selenium.jar > /dev/null 2>&1 &
+
+            - name: Run webserver
+              run: composer serve
+
+            - run: composer validate
+            - run: composer phpstan
+            - run: composer php-cs
+            - run: composer phpunit
+            - run: composer phpspec
