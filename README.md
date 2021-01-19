@@ -1,6 +1,6 @@
 # SuluSyliusProducerPlugin
 
-[![Build Status](https://travis-ci.org/sulu/SuluSyliusProducerPlugin.svg)](https://travis-ci.org/sulu/SuluSyliusProducerPlugin)
+[![Test workflow status](https://img.shields.io/github/workflow/status/sulu/SuluSyliusProducerPlugin/Test%20application.svg?label=test-workflow)](https://github.com/sulu/SuluSyliusProducerPlugin/actions)
 
 Producer for synchronization products with sulu.
 
