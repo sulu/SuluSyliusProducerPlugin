@@ -45,7 +45,7 @@ class TaxonEventSubscriber implements EventSubscriberInterface
         $this->messageProducer = $messageProducer;
     }
 
-    public function synchronize(GenericEvent $event)
+    public function synchronize(GenericEvent $event): void
     {
         $taxon = $event->getSubject();
         if (!$taxon instanceof TaxonInterface) {
@@ -55,7 +55,7 @@ class TaxonEventSubscriber implements EventSubscriberInterface
         $this->messageProducer->synchronize($taxon);
     }
 
-    public function preRemove(GenericEvent $event)
+    public function preRemove(GenericEvent $event): void
     {
         $taxon = $event->getSubject();
         if (!$taxon instanceof TaxonInterface) {
@@ -65,7 +65,7 @@ class TaxonEventSubscriber implements EventSubscriberInterface
         $this->idsCache[spl_object_hash($taxon)] = $taxon->getId();
     }
 
-    public function postRemove(GenericEvent $event)
+    public function postRemove(GenericEvent $event): void
     {
         $taxon = $event->getSubject();
         $hash = spl_object_hash($taxon);

@@ -42,12 +42,22 @@ class ProductMessageProducer implements ProductMessageProducerInterface
     public function synchronize(ProductInterface $product): void
     {
         $payload = $this->productSerializer->serialize($product);
-        $this->messageBus->dispatch(new SynchronizeProductMessage($product->getCode(), $payload));
+        $code = $product->getCode();
+        if (!$code) {
+            throw new \RuntimeException();
+        }
+
+        $this->messageBus->dispatch(new SynchronizeProductMessage($code, $payload));
     }
 
     public function remove(ProductInterface $product): void
     {
-        $message = new RemoveProductMessage($product->getCode());
+        $code = $product->getCode();
+        if (!$code) {
+            throw new \RuntimeException();
+        }
+
+        $message = new RemoveProductMessage($code);
 
         $this->messageBus->dispatch($message);
     }

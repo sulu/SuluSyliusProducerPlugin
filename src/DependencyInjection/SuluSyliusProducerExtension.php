@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class SuluSyliusProducerExtension extends Extension implements PrependExtensionInterface
 {
-    public function prepend(ContainerBuilder $container)
+    public function prepend(ContainerBuilder $container):void
     {
         if ($container->hasExtension('framework')) {
             $container->prependExtensionConfig('framework', [

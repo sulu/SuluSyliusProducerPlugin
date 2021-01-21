@@ -37,7 +37,7 @@ class CustomerEventSubscriber implements EventSubscriberInterface
         $this->tokenGenerator = $tokenGenerator;
     }
 
-    public function createToken(GenericEvent $event)
+    public function createToken(GenericEvent $event):void
     {
         $customer = $event->getSubject();
         if (!$customer instanceof CustomerInterface) {

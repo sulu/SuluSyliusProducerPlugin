@@ -34,11 +34,13 @@ abstract class BaseSynchronizeCommand extends Command
         $this->entityManager = $entityManager;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // disable logger because of memory issues
         $this->entityManager->getConfiguration()->setSQLLogger(null);
         $this->entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
         gc_enable();
+
+        return 0;
     }
 }

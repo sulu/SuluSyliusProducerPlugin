@@ -28,19 +28,24 @@ class ProductVariantMessageProducer extends BaseMessageProducer implements Produ
             return;
         }
 
-        $message = new SynchronizeProductVariantMessage(
-            $product->getCode(),
-            $productVariant->getCode(),
-            $payload
-        );
+        $code = $product->getCode();
+        $variantCode = $productVariant->getCode();
+        if (!$code || !$variantCode) {
+            throw new \RuntimeException();
+        }
 
+        $message = new SynchronizeProductVariantMessage($code, $variantCode, $payload);
         $this->getMessageBus()->dispatch($message);
     }
 
     public function remove(ProductVariantInterface $productVariant): void
     {
-        $message = new RemoveProductVariantMessage($productVariant->getCode());
+        $variantCode = $productVariant->getCode();
+        if (!$variantCode) {
+            throw new \RuntimeException();
+        }
 
+        $message = new RemoveProductVariantMessage($variantCode);
         $this->getMessageBus()->dispatch($message);
     }
 }

@@ -49,13 +49,13 @@ class SynchronizeTaxonCommand extends BaseSynchronizeCommand
         $this->taxonRepository = $taxonRepository;
     }
 
-    protected function configure()
+    protected function configure():void
     {
         $this->setName('sulu-sylius:synchronize:taxon')
             ->setDescription('Synchronize taxon tree to Sulu');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // disable logger because of memory issues
         $this->entityManager->getConfiguration()->setSQLLogger(null);
@@ -63,6 +63,8 @@ class SynchronizeTaxonCommand extends BaseSynchronizeCommand
         gc_enable();
 
         $this->syncTaxonTree($output);
+
+        return 0;
     }
 
     private function syncTaxonTree(OutputInterface $output): void

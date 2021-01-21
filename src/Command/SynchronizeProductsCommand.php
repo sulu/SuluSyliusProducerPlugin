@@ -50,17 +50,19 @@ class SynchronizeProductsCommand extends BaseSynchronizeCommand
         $this->productRepository = $productRepository;
     }
 
-    protected function configure()
+    protected function configure():void
     {
         $this->setName('sulu-sylius:synchronize:products')
             ->setDescription('Synchronize all products to Sulu');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output):int
     {
         parent::execute($input, $output);
 
         $this->syncProducts($output);
+
+        return 0;
     }
 
     private function syncProducts(OutputInterface $output): void

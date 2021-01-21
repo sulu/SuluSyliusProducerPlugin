@@ -144,7 +144,7 @@ class ProductSerializer implements ProductSerializerInterface
         );
     }
 
-    private function getCustomData($object): array
+    private function getCustomData(object $object): array
     {
         if (!$object instanceof CustomDataInterface) {
             return [];

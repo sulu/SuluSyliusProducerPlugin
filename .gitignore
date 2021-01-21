@@ -1,15 +1,14 @@
-/bin/*
-!/bin/.gitkeep
-
 /vendor/
-/node_modules/
+/node_modules
 /composer.lock
 
 /etc/build/*
-!/etc/build/.gitkeep
+!/etc/build/.gitignore
 
 /tests/Application/yarn.lock
 
-.php_cs.cache
+/.phpunit.result.cache
+/behat.yml
+/phpspec.yml
 
 .idea

@@ -22,9 +22,9 @@ class TaxonMessageProducer extends BaseMessageProducer implements TaxonMessagePr
     public function synchronize(TaxonInterface $taxon): void
     {
         $root = null;
-        while (!$root) {
+        while (null === $root) {
             $parent = $taxon->getParent();
-            if ($parent) {
+            if (null !== $parent) {
                 $taxon = $parent;
 
                 continue;
@@ -33,7 +33,7 @@ class TaxonMessageProducer extends BaseMessageProducer implements TaxonMessagePr
             $root = $taxon;
         }
 
-        if (!$root) {
+        if (null === $root) {
             return;
         }
 

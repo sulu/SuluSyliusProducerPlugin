@@ -1,6 +1,6 @@
 # SuluSyliusProducerPlugin
 
-[![Test workflow status](https://img.shields.io/github/workflow/status/sulu/SuluSyliusProducerPlugin/Test%20application.svg?label=test-workflow)](https://github.com/sulu/SuluSyliusProducerPlugin/actions)
+[![Test workflow status](https://img.shields.io/github/workflow/status/sulu/SuluSyliusProducerPlugin/Build.svg?label=build)](https://github.com/sulu/SuluSyliusProducerPlugin/actions)
 
 Producer for synchronization products with sulu.
 
@@ -24,7 +24,7 @@ composer require sulu/sylius-producer-plugin
 // config/routes/sulu_sylius_producer.yaml
 
 sylius_sulu_admin_api:
-    resource: "@SuluSyliusProducerPlugin/Resources/config/routing.yml"
+    resource: "@SuluSyliusProducerPlugin/Resources/config/routing_admin.yml"
     prefix: /api
 ```
 

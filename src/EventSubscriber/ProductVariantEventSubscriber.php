@@ -39,7 +39,7 @@ class ProductVariantEventSubscriber implements EventSubscriberInterface
         $this->messageProducer = $messageProducer;
     }
 
-    public function synchronize(GenericEvent $event)
+    public function synchronize(GenericEvent $event):void
     {
         $productVariant = $event->getSubject();
         if (!$productVariant instanceof ProductVariantInterface) {
@@ -49,7 +49,7 @@ class ProductVariantEventSubscriber implements EventSubscriberInterface
         $this->messageProducer->synchronize($productVariant);
     }
 
-    public function remove(GenericEvent $event)
+    public function remove(GenericEvent $event):void
     {
         $productVariant = $event->getSubject();
         if (!$productVariant instanceof ProductVariantInterface) {
