@@ -11,29 +11,29 @@ declare(strict_types=1);
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message;
+namespace Sulu\Bundle\SyliusConsumerBundle\Message;
 
-class SynchronizeTaxonMessage
+class SynchronizeProductMessage
 {
     /**
-     * @var int
+     * @var string
      */
-    private $id;
+    private $code;
 
     /**
      * @var array
      */
     private $payload;
 
-    public function __construct(int $id, array $payload)
+    public function __construct(string $code, array $payload)
     {
-        $this->id = $id;
+        $this->code = $code;
         $this->payload = $payload;
     }
 
-    public function getId(): int
+    public function getCode(): string
     {
-        return $this->id;
+        return $this->code;
     }
 
     public function getPayload(): array

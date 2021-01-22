@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sulu\SyliusProducerPlugin\Producer;
 
-use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveTaxonMessage;
-use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeTaxonMessage;
+use Sulu\Bundle\SyliusConsumerBundle\Message\RemoveTaxonMessage;
+use Sulu\Bundle\SyliusConsumerBundle\Message\SynchronizeTaxonMessage;
 use Sylius\Component\Core\Model\TaxonInterface;
 
 class TaxonMessageProducer extends BaseMessageProducer implements TaxonMessageProducerInterface

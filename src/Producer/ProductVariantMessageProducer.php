@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sulu\SyliusProducerPlugin\Producer;
 
-use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductVariantMessage;
-use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductVariantMessage;
+use Sulu\Bundle\SyliusConsumerBundle\Message\RemoveProductVariantMessage;
+use Sulu\Bundle\SyliusConsumerBundle\Message\SynchronizeProductVariantMessage;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 
 class ProductVariantMessageProducer extends BaseMessageProducer implements ProductVariantMessageProducerInterface

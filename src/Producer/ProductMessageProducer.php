@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Sulu\SyliusProducerPlugin\Producer;
 
-use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductMessage;
-use Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductMessage;
+use Sulu\Bundle\SyliusConsumerBundle\Message\RemoveProductMessage;
+use Sulu\Bundle\SyliusConsumerBundle\Message\SynchronizeProductMessage;
 use Sulu\SyliusProducerPlugin\Producer\Serializer\ProductSerializerInterface;
 use Sylius\Component\Core\Model\ProductInterface;
 use Symfony\Component\Messenger\MessageBusInterface;

@@ -1,55 +1,9 @@
 framework:
     messenger:
         routing:
-            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductMessage': sulu_sylius_transport
-            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeProductVariantMessage': sulu_sylius_transport
-            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\SynchronizeTaxonMessage': sulu_sylius_transport
-            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductMessage': sulu_sylius_transport
-            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveProductVariantMessage': sulu_sylius_transport
-            'Sulu\Bundle\SyliusConsumerBundle\Model\Product\Message\RemoveTaxonMessage': sulu_sylius_transport
-
-# TODO: We can remove this wenn issue is fixed:
-# https://github.com/Sylius/Sylius/issues/10024
-sylius_grid:
-    grids:
-        sylius_admin_api_product_attribute:
-            driver:
-                name: doctrine/orm
-                options:
-                    class: "%sylius.model.product_attribute.class%"
-            filters:
-                code:
-                    type: string
-        sylius_admin_api_address:
-            driver:
-                name: doctrine/orm
-                options:
-                    class: "%sylius.model.address.class%"
-            filters:
-                customerId:
-                    type: string
-                    options:
-                        fields: [customer]
-        sylius_admin_api_order:
-            driver:
-                name: doctrine/orm
-                options:
-                    class: "%sylius.model.order.class%"
-                    repository:
-                        method: createListQueryBuilder
-            sorting:
-                number: desc
-            fields:
-                number:
-                    type: string
-                    path: .
-                    sortable: ~
-            filters:
-                customerId:
-                    type: string
-                    options:
-                        fields: [customer.id]
-                date:
-                    type: date
-                    options:
-                        field: checkoutCompletedAt
+            'Sulu\Bundle\SyliusConsumerBundle\Message\SynchronizeProductMessage': sulu_sylius_transport
+            'Sulu\Bundle\SyliusConsumerBundle\Message\SynchronizeProductVariantMessage': sulu_sylius_transport
+            'Sulu\Bundle\SyliusConsumerBundle\Message\SynchronizeTaxonMessage': sulu_sylius_transport
+            'Sulu\Bundle\SyliusConsumerBundle\Message\RemoveProductMessage': sulu_sylius_transport
+            'Sulu\Bundle\SyliusConsumerBundle\Message\RemoveProductVariantMessage': sulu_sylius_transport
+            'Sulu\Bundle\SyliusConsumerBundle\Message\RemoveTaxonMessage': sulu_sylius_transport

@@ -1,3 +1,0 @@
-acme_sylius_example_admin:
-    resource: "@SuluSyliusProducerPlugin/Resources/config/admin_routing.yml"
-    prefix: /admin
