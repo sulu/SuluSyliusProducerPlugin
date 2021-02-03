@@ -23,10 +23,6 @@ final class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder('sulu_sylius_producer');
-        // BC layer for symfony/config < 4.2
-        $rootNode = method_exists($treeBuilder, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root('sulu_sylius_producer');
-
-        return $treeBuilder;
+        return new TreeBuilder('sulu_sylius_producer');
     }
 }
