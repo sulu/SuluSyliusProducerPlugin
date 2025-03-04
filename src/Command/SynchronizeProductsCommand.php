@@ -14,20 +14,21 @@ declare(strict_types=1);
 namespace Sulu\SyliusProducerPlugin\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface;
+use Sulu\SyliusProducerPlugin\Message\TriggerProductProducerMessage;
 use Sylius\Component\Core\Model\ProductInterface;
 use Sylius\Component\Core\Repository\ProductRepositoryInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class SynchronizeProductsCommand extends BaseSynchronizeCommand
 {
     /** @param ProductRepositoryInterface<ProductInterface> $productRepository */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ProductMessageProducerInterface $productMessageProducer,
         private ProductRepositoryInterface $productRepository,
+        private MessageBusInterface $messageBus,
     ) {
         parent::__construct($entityManager);
     }
@@ -72,8 +73,7 @@ class SynchronizeProductsCommand extends BaseSynchronizeCommand
             if (!$product instanceof ProductInterface) {
                 continue;
             }
-
-            $this->productMessageProducer->synchronize($product);
+            $this->messageBus->dispatch(new TriggerProductProducerMessage($product->getId()));
 
             $this->entityManager->detach($product);
             ++$processedItems;

@@ -14,19 +14,20 @@ declare(strict_types=1);
 namespace Sulu\SyliusProducerPlugin\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface;
+use Sulu\SyliusProducerPlugin\Message\TriggerTaxonProducerMessage;
 use Sylius\Component\Taxonomy\Model\TaxonInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class SynchronizeTaxonCommand extends BaseSynchronizeCommand
 {
     /** @param TaxonRepositoryInterface<TaxonInterface> $taxonRepository */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private TaxonMessageProducerInterface $taxonMessageProducer,
         private TaxonRepositoryInterface $taxonRepository,
+        private MessageBusInterface $messageBus,
     ) {
         parent::__construct($entityManager);
     }
@@ -62,7 +63,11 @@ class SynchronizeTaxonCommand extends BaseSynchronizeCommand
             $taxons = \array_merge($taxons, $this->extractChildrenFlat($rootTaxon));
         }
 
-        $this->taxonMessageProducer->synchronize($taxons);
+        $taxonIds = \array_map(
+            fn (TaxonInterface $taxon) => $taxon->getId(),
+            $taxons,
+        );
+        $this->messageBus->dispatch(new TriggerTaxonProducerMessage($taxonIds));
     }
 
     private function extractChildrenFlat(TaxonInterface $rootTaxon): array
