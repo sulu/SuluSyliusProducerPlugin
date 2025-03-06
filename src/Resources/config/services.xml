@@ -30,6 +30,36 @@
             <argument type="service" id="sulu_sylius_producer.messenger_bus"/>
         </service>
 
+        <service
+            id="Sulu\SyliusProducerPlugin\MessageHandler\TriggerProductProducerMessageHandler"
+            class="Sulu\SyliusProducerPlugin\MessageHandler\TriggerProductProducerMessageHandler"
+        >
+            <argument type="service" id="sylius.repository.product"/>
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service
+            id="Sulu\SyliusProducerPlugin\MessageHandler\TriggerProductVariantProducerMessageHandler"
+            class="Sulu\SyliusProducerPlugin\MessageHandler\TriggerProductVariantProducerMessageHandler"
+        >
+            <argument type="service" id="sylius.repository.product_variant"/>
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
+        <service
+            id="Sulu\SyliusProducerPlugin\MessageHandler\TriggerTaxonProducerMessageHandler"
+            class="Sulu\SyliusProducerPlugin\MessageHandler\TriggerTaxonProducerMessageHandler"
+        >
+            <argument type="service" id="sylius.repository.taxon"/>
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface"/>
+
+            <tag name="messenger.message_handler"/>
+        </service>
+
         <service id="Sulu\SyliusProducerPlugin\EventSubscriber\ProductEventSubscriber">
             <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"/>
 
@@ -72,24 +102,24 @@
 
         <service id="Sulu\SyliusProducerPlugin\Command\SynchronizeTaxonCommand">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface"/>
             <argument type="service" id="sylius.repository.taxon"/>
+            <argument type="service" id="sulu_sylius_producer.messenger_bus"/>
 
             <tag name="console.command" />
         </service>
 
         <service id="Sulu\SyliusProducerPlugin\Command\SynchronizeProductsCommand">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"/>
             <argument type="service" id="sylius.repository.product"/>
+            <argument type="service" id="sulu_sylius_producer.messenger_bus"/>
 
             <tag name="console.command" />
         </service>
 
         <service id="Sulu\SyliusProducerPlugin\Command\SynchronizeProductVariantsCommand">
             <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface"/>
             <argument type="service" id="sylius.repository.product_variant"/>
+            <argument type="service" id="sulu_sylius_producer.messenger_bus"/>
 
             <tag name="console.command" />
         </service>

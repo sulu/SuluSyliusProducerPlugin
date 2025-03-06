@@ -14,20 +14,21 @@ declare(strict_types=1);
 namespace Sulu\SyliusProducerPlugin\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface;
+use Sulu\SyliusProducerPlugin\Message\TriggerProductVariantProducerMessage;
 use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Product\Repository\ProductVariantRepositoryInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class SynchronizeProductVariantsCommand extends BaseSynchronizeCommand
 {
     /** @param ProductVariantRepositoryInterface<ProductVariantInterface> $productVariantRepository */
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ProductVariantMessageProducerInterface $productVariantMessageProducer,
         private ProductVariantRepositoryInterface $productVariantRepository,
+        private MessageBusInterface $messageBus,
     ) {
         parent::__construct($entityManager);
     }
@@ -73,7 +74,7 @@ class SynchronizeProductVariantsCommand extends BaseSynchronizeCommand
                 continue;
             }
 
-            $this->productVariantMessageProducer->synchronize($productVariant);
+            $this->messageBus->dispatch(new TriggerProductVariantProducerMessage($productVariant->getId()));
 
             $this->entityManager->detach($productVariant);
             ++$processedItems;
