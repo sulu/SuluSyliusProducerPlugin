@@ -52,6 +52,7 @@ class SynchronizeProductsCommand extends BaseSynchronizeCommand
     {
         $output->writeln('<info>Sync products</info>');
 
+        /** @var int $count */
         $count = $this->entityManager->createQueryBuilder()
             ->select('count(product.id)')
             ->from($this->productRepository->getClassName(), 'product')
