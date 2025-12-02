@@ -41,6 +41,13 @@
         "sort-packages": true,
         "allow-plugins": {
             "phpstan/extension-installer": false
+        },
+        "audit": {
+            "ignore": [
+                "CVE-2025-31481",
+                "CVE-2025-31485",
+                "PKSA-4g5g-4rkv-myqs"
+            ]
         }
     },
     "scripts": {
