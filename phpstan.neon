@@ -16,5 +16,7 @@ parameters:
         - '/Call to an undefined method Sylius\\Component\\User\\Model\\UserInterface\:\:isAccountNonExpired\(\)\./'
         - '/Call to an undefined method Sylius\\Component\\User\\Model\\UserInterface\:\:isAccountNonLocked\(\)\./'
         - '/Call to an undefined method Sylius\\Component\\User\\Model\\UserInterface\:\:isCredentialsNonExpired\(\)\./'
+        - '/PHPDoc tag @param for parameter .* contains generic type .* but interface .* is not generic\./'
+        - '/PHPDoc type for property .* contains generic type .* but interface .* is not generic\./'
         -
             identifier: missingType.iterableValue
