@@ -42,5 +42,15 @@ final class SuluSyliusProducerExtension extends Extension implements PrependExte
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
 
         $loader->load('services.xml');
+
+        if (!$config['resource_events']['enabled']) {
+            foreach (['Product', 'ProductVariant', 'Taxon'] as $name) {
+                $container->removeDefinition('Sulu\\SyliusProducerPlugin\\EventSubscriber\\' . $name . 'EventSubscriber');
+            }
+        }
+
+        if ($config['doctrine_listener']['enabled']) {
+            $loader->load('doctrine_listener.xml');
+        }
     }
 }

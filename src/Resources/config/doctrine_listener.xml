@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Sulu\SyliusProducerPlugin\Doctrine\ProductChangeListener">
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductMessageProducerInterface"/>
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\ProductVariantMessageProducerInterface"/>
+            <argument type="service" id="Sulu\SyliusProducerPlugin\Producer\TaxonMessageProducerInterface"/>
+
+            <tag name="doctrine.event_listener" event="onFlush"/>
+            <tag name="doctrine.event_listener" event="postFlush"/>
+            <tag name="doctrine.event_listener" event="onClear"/>
+        </service>
+    </services>
+</container>
